@@ -9,8 +9,8 @@
 title: 热衷技术.享受生活 # ex. I m Chuan
 name: 一笑而过 # ex. DONGChuan
 email: 1092138456@qq.com
-location: My location # ex. Nice, France
-company: MyCompany
+location: 位置 # ex. Nice, France
+company: 公司
 company_url: my_company_website
 github_url: https://github.com/laughitover # ex. https://github.com/DONGChuan
 github_username: # ex. DONGChuan
@@ -21,7 +21,8 @@ repository: github_username/github_username.github.io # ex. DONGChuan/DONGChuan.
 # The base hostname & protocol for your site
 # For local test, please use http://localhost:4000
 # For production, use your github page url. ex. http://dongchuan.github.io
-url: http://localhost:4000
+# url: http://localhost:4000
+url: https://laughitover.github.io/
 
 ## Gem
 gems:
