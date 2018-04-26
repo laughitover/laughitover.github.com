@@ -8,11 +8,11 @@
 # Site settings
 title: 热衷技术.享受生活 # ex. I m Chuan
 name: 一笑而过 # ex. DONGChuan
-email: my_email_address@lalala.com
+email: 1092138456@qq.com
 location: My location # ex. Nice, France
 company: MyCompany
 company_url: my_company_website
-github_url: my_github_url # ex. https://github.com/DONGChuan
+github_url: https://github.com/laughitover # ex. https://github.com/DONGChuan
 github_username: # ex. DONGChuan
 description: 描述我的网站
 favicon: favicon.png # Image must be in assets/images
