@@ -65,6 +65,8 @@
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
+.icon-logo.site-header-nav-scrolled {fill: #000;}
+
 .site-header.site-header-nav-scrolled {
     margin: 0;
     background-color: white;
@@ -81,6 +83,8 @@
 .site-header {
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
+
+.icon-logo.site-header-nav-scrolled-ph {fill :#000;}
 
 .site-header.site-header-nav-scrolled-ph {
     margin-top: -160px;
