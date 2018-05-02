@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 一笑而过
-subtitle: <span class="mega-octicon octicon-clippy"></span>&nbsp;&nbsp; Take notes about everything new
+subtitle: stay hungry stay foolish (求知若饥，虚心若愚)
 menu: blog
 css: ['blog-page.css']
 ---
