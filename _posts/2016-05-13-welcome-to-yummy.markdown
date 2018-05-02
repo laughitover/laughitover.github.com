@@ -8,7 +8,6 @@ categories: jekyll update
 Welcome to use Yummy Jekyll as your jekyll theme!
 
 ## Yummy Jekyll
-
-## How to install
+![](http://www.ityouknow.com/assets/images/2018/time.jpg)
 
 ## Licence
