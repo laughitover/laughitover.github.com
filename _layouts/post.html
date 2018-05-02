@@ -21,7 +21,10 @@ css: ['sidebar-post-nav.css']
             {{ content }}
 
             <!-- Comments -->
-            {% include disqus-comments.html %}
+            <!--{% include disqus-comments.html %}-->
+            <div class="comment">
+                {% include comments.html %}
+            </div>
         </div>
 
         <div class="col-md-4">
