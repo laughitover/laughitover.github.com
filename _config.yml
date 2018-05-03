@@ -24,7 +24,7 @@ repository: github_username/github_username.github.io # ex. DONGChuan/DONGChuan.
 # url: http://localhost:4000
 #url: https://laughitover.github.io/
 url: http://www.laughitover.com/
-
+enforce_ssl: laughitover.com
 ## Gem
 gems:
   - jekyll-paginate
