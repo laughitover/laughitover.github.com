@@ -22,7 +22,8 @@ repository: github_username/github_username.github.io # ex. DONGChuan/DONGChuan.
 # For local test, please use http://localhost:4000
 # For production, use your github page url. ex. http://dongchuan.github.io
 # url: http://localhost:4000
-url: https://laughitover.github.io/
+#url: https://laughitover.github.io/
+url: http://www.laughitover.com/
 
 ## Gem
 gems:
