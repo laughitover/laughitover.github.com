@@ -18,4 +18,4 @@ title: hello world
 那么我要使用此博客做什么呢？是致力于做一个有影响的技术博客，还是只是搭建满足自己的好奇心呢？
 说实话，我也不知道我要干什么，想了整个五一也没有特别好的想法，暂定用他来记录自己的学习和生活吧。
 
-![](https://laughitover.github.io/assets/images/2018/time.jpg)
+![图片描述](http://www.laughitover.com/assets/images/2018/timg.jpg)
