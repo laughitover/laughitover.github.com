@@ -1,8 +1,8 @@
 ---
 layout: page
-title: 你的生活和我一样吗
+title: 享受生活
 titlebar: life
-subtitle: <span class="mega-octicon octicon-organization"></span>&nbsp;&nbsp; 你的生活有什么故事？
+subtitle: <span class="mega-octicon octicon-organization"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-road"></span>&nbsp;&nbsp; 相遇即最好，经历即财富
 menu: life
 css: ['blog-page.css']
 permalink: /life
