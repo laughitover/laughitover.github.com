@@ -75,7 +75,7 @@ navs:
     label: Bookmark
 
   -
-    href: /about.html
+    href: /pages/about
     label: About
 
 # selected articles
@@ -94,7 +94,7 @@ labels:
     name: life
 
   -
-    href: /open-source.html
+    href: /pages/open-source.html
     name: Code
 
 
