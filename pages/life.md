@@ -2,7 +2,7 @@
 layout: page
 title: 享受生活
 titlebar: life
-subtitle: </span>&nbsp;&nbsp;<span class="glyphicon glyphicon-road"></span>&nbsp;&nbsp; 相遇即最好，经历即财富
+subtitle: <span class="glyphicon glyphicon-road"></span>&nbsp;&nbsp; 相遇即最好，经历即财富
 menu: life
 css: ['blog-page.css']
 permalink: /life
