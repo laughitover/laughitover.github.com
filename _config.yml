@@ -86,6 +86,17 @@ classes:
     name: 享受生活
     describe: 乐观豁达，品味人生
 
+# labels. my blog key words
+labels:
+
+  -
+    href: /life.html
+    name: 生活
+
+  -
+    href: /open-source.html
+    name: Code
+
 
 # Sidebar to show popular repo
 side_bar_repo_limit: 5 # Number of repos to show
