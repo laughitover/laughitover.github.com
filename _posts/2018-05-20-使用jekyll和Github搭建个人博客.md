@@ -1,17 +1,17 @@
 ---
 layout: post
 title: 使用jekyll和Github搭建个人博客
-category: others
+category: life
 ---
 很多人都会写一些文章发布到博客上，有的人会自己买域名和空间搭建独立博客，更多的人会选择CSDN或者博客园等免费空间，
 在此给大家介绍一种简单免费的方式来搭建个人博客。
 
 ## 使用jekyll和Github三步搭建个人博客
-1.在 Github 上建一个库，库的名字是xxx.github.com，其中的xxx是你的github的账号名.
+1. 在 Github 上建一个库，库的名字是xxx.github.com，其中的xxx是你的github的账号名.
 
-2.在Jekyll模板中选择自己喜欢的模板clone到本地（这里选Bef做实例.
+2. 在Jekyll模板中选择自己喜欢的模板clone到本地（这里选Bef做实例.
 
-3.对模板中的信息进行修改(注释掉_config.yml文件里：baseurl：“/bef”)，将模板push到自己的库中，然后访问xxx.github.io，可访问到自己的博客，so easy
+3. 对模板中的信息进行修改(注释掉_config.yml文件里：baseurl：“/bef”)，将模板push到自己的库中，然后访问xxx.github.io，可访问到自己的博客，so easy
 注:由于此模板图片较多，所以加载较慢，视觉效果还是不错的。
 
 ## So cool发生了什么？
@@ -41,7 +41,8 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
 表示该文章的模板使用_layouts目录下的post.html文件；"title: "，表示该文章的标题，如果不设置这个值，
 默认使用嵌入文件名的标题等等。
 
-4._includes这里面的就是可以重复利用的文件。这个文件可以被其他的文件包含，重复利用。`{% include head.html %}`，
+4._includes这里面的就是可以重复利用的文件。这个文件可以被其他的文件包含，重复利用。
+> {% include head.html %}，
 就是引用head.html。
 
 5._posts这里的文件就实际的文章内容了。文件名必须使用“年-月-日-文章标题.后缀名”的格式。在博客上发布文章的时候，
@@ -54,7 +55,7 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
 1.首先需要注册GitHub Application，Authorization callback URL 填写当前使用插件页面的域名。具体见下图。
 
 2.创建comments.html，内容如下，添加到about页面（这里以about页面为例，其它页面类似）
-```
+{% highlight css %}
 {% if page.comments != false %}
     {% if site.comments_provider == 'gitalk' %}
         <div id="gitalk-container"></div>
@@ -74,7 +75,7 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
         </script>
     {% endif %}
 {% endif %}
-```
+{% endhighlight %}
 
 3.在gitHub上创建仓库blog-comments，添加如下代码到_config.yml
 注：clientID和clientSecret是第一步注册的时候得到的，owner是自己的用户名
@@ -94,7 +95,7 @@ gitalk:
 相信很多人对自己的博客访问量还是很感兴趣的，好的关注度和大的访问量能给自己写博客很大信心，
 下面我就介绍一下如何给自己的博哥添加统计功能（以百度统计为例）
 
-1.在百度统计上注册账号并登陆，然后新增网站
+* 在百度统计上注册账号并登陆，然后新增网站
 
 2.在_includes下创建baidu-anaylysis.html，内容是百度统计生成的代码。
 
