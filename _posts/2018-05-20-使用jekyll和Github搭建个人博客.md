@@ -9,7 +9,7 @@ category: life
 ## 使用jekyll和Github三步搭建个人博客
 1. 在 Github 上建一个库，库的名字是xxx.github.com，其中的xxx是你的github的账号名.
 
-2. 在Jekyll模板中选择自己喜欢的模板clone到本地（这里选Bef做实例.
+2. 在Jekyll模板中选择自己喜欢的模板clone到本地（这里选Bef做实例).
 
 3. 对模板中的信息进行修改(注释掉_config.yml文件里：baseurl：“/bef”)，将模板push到自己的库中，然后访问xxx.github.io，可访问到自己的博客，so easy
 注:由于此模板图片较多，所以加载较慢，视觉效果还是不错的。
@@ -54,9 +54,9 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
 第三方的评论系统有很多，这里选择gitalk来进行演示，gitalk是纯客户端组件，无 Server 端，使用 Github 登录，
 所有评论数据存储为 Github Issue。
 
-1. 首先需要注册GitHub Application，Authorization callback URL 填写当前使用插件页面的域名。具体见下图。
+* 首先需要注册GitHub Application，Authorization callback URL 填写当前使用插件页面的域名。具体见下图。
 
-2. 创建comments.html，内容如下，添加到about页面（这里以about页面为例，其它页面类似）
+* 创建comments.html，内容如下，添加到about页面（这里以about页面为例，其它页面类似）
 {% highlight css %}
 {% if page.comments != false %}
     {% if site.comments_provider == 'gitalk' %}
@@ -79,7 +79,7 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
 {% endif %}
 {% endhighlight %}
 
-3. 在gitHub上创建仓库blog-comments，添加如下代码到_config.yml
+* 在gitHub上创建仓库blog-comments，添加如下代码到_config.yml
 注：clientID和clientSecret是第一步注册的时候得到的，owner是自己的用户名
 ```
 comments_provider: gitalk
@@ -90,9 +90,9 @@ gitalk:
     clientSecret: 30532bea61e8b63dc5a852e448621a8c89cef99b
 ```
 
-4. 下载gitalk.min.js（放到assets/js文件夹下）和gitalk.css（放到assets/css文件夹下）。
+* 下载gitalk.min.js（放到assets/js文件夹下）和gitalk.css（放到assets/css文件夹下）。
 
-5. 使用gitHub账号登陆初始化，就可以使用评论功能了。
+* 使用gitHub账号登陆初始化，就可以使用评论功能了。
 
 ## 给个人博客加统计功能
 相信很多人对自己的博客访问量还是很感兴趣的，好的关注度和大的访问量能给自己写博客很大信心，
