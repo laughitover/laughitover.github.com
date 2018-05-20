@@ -7,9 +7,9 @@ category: others
 在此给大家介绍一种简单免费的方式来搭建个人博客。
 
 ## 使用jekyll和Github三步搭建个人博客
-1.在 Github 上建一个库，库的名字是xxx.github.com，其中的xxx是你的github的账号名
-2.在Jekyll模板中选择自己喜欢的模板clone到本地（这里选Bef做实例）
-3.对模板中的信息进行修改(注释掉_config.yml文件里：baseurl：“/bef”)，将模板push到自己的库中，然后访问xxx.github.io，可访问到自己的博客，so easy！
+1.在 Github 上建一个库，库的名字是xxx.github.com，其中的xxx是你的github的账号名.
+2.在Jekyll模板中选择自己喜欢的模板clone到本地（这里选Bef做实例.
+3.对模板中的信息进行修改(注释掉_config.yml文件里：baseurl：“/bef”)，将模板push到自己的库中，然后访问xxx.github.io，可访问到自己的博客，so easy
 注:由于此模板图片较多，所以加载较慢，视觉效果还是不错的。
 ## So cool发生了什么？
 为什么只是简单的三步操作，就完成了个人博客的搭建呢？
@@ -34,7 +34,7 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
 3._layouts这里存放的是模板文件，发布的文章会根据文章顶部的yaml文件头来设置一些元数据，如"layout:default"，
 表示该文章的模板使用_layouts目录下的post.html文件；"title: "，表示该文章的标题，如果不设置这个值，
 默认使用嵌入文件名的标题等等。
-4._includes这里面的就是可以重复利用的文件。这个文件可以被其他的文件包含，重复利用。{% include head.html %}，
+4._includes这里面的就是可以重复利用的文件。这个文件可以被其他的文件包含，重复利用。`{% include head.html %}，
 就是引用head.html。
 5._posts这里的文件就实际的文章内容了。文件名必须使用“年-月-日-文章标题.后缀名”的格式。在博客上发布文章的时候，
 只需要在此文件夹中加入带有 YAML 头信息的 markdown 文件，然后 push 到 Github，就会被自动渲染成 HTML。
@@ -45,6 +45,7 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
 1.首先需要注册GitHub Application，Authorization callback URL 填写当前使用插件页面的域名。具体见下图。
 
 2.创建comments.html，内容如下，添加到about页面（这里以about页面为例，其它页面类似）
+```
 {% if page.comments != false %}
 
     {% if site.comments_provider == 'gitalk' %}
@@ -65,16 +66,17 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
         </script>
     {% endif %}
 {% endif %}
-
+```
 3.在gitHub上创建仓库blog-comments，添加如下代码到_config.yml
 注：clientID和clientSecret是第一步注册的时候得到的，owner是自己的用户名
+```
 comments_provider: gitalk
 gitalk:
     owner: jueye3
     repo: blog-comments
     clientID: fa5504fe07f319cba9ee
     clientSecret: 30532bea61e8b63dc5a852e448621a8c89cef99b
-
+```
 4.下载gitalk.min.js（放到assets/js文件夹下）和gitalk.css（放到assets/css文件夹下）。
 5.使用gitHub账号登陆初始化，就可以使用评论功能了。
 ## 给个人博客加统计功能
@@ -86,7 +88,7 @@ gitalk:
 3.在head.html文件中添加{% include  baidu-anaylysis.html %}，Push后可以检查是否成功。
 4.代码正确安装，可以查看报告了
 
-六．给个人博客绑定域名
+# 给个人博客绑定域名
 首先需要有域名，如果没有域名，可以通过很多渠道注册域名，有了域名之后，新建一个CNAME文件（无后缀名），然后用文本编辑器打开，
 在首行添加你的网站域名，如http://xxxx.com，注意前面没有http://example.com或者xxx.example.com。
 在域名解析提供商，下面以百度云为例。
