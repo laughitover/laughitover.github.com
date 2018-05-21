@@ -45,8 +45,7 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
 表示该文章的模板使用_layouts目录下的post.html文件；"title: "，表示该文章的标题，如果不设置这个值，
 默认使用嵌入文件名的标题等等。
 
-4. _includes这里面的就是可以重复利用的文件。这个文件可以被其他的文件包含，重复利用。    {% include head.html %}
-就是引用head.html。
+4. _includes这里面的就是可以重复利用的文件。这个文件可以被其他的文件包含，重复利用。    {% include head.html %}    就是引用head.html。
 
 5. _posts这里的文件就实际的文章内容了。文件名必须使用“年-月-日-文章标题.后缀名”的格式。在博客上发布文章的时候，
 只需要在此文件夹中加入带有 YAML 头信息的 markdown 文件，然后 push 到 Github，就会被自动渲染成 HTML。
