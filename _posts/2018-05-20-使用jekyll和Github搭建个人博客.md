@@ -12,6 +12,7 @@ category: life
 2. 在Jekyll模板中选择自己喜欢的模板clone到本地（这里选Bef做实例).
 
 3. 对模板中的信息进行修改(注释掉_config.yml文件里：baseurl：“/bef”)，将模板push到自己的库中，然后访问xxx.github.io，可访问到自己的博客，so easy
+
 注:由于此模板图片较多，所以加载较慢，视觉效果还是不错的。
 
 ## So cool发生了什么？
@@ -19,8 +20,8 @@ category: life
 整体思路:先在本地编写符合Jekyll规范的网站源码(在模板基础上更改)，然后上传到github，这种上传并不是单纯的上传，
 而是会经过Jekyll程序的再处理。由github生成并托管整个网站。
 ### Jekyll是什么？
-   Jekyll是一个简单的静态站点生成器，它会根据网页源码生成静态文件。是两大静态博客主流框架（jekyll和hexo）之一。
-jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，jekyll使用Liquid模板语言(官方文档),是基于ruby的，
+Jekyll是一个简单的静态站点生成器，它会根据网页源码生成静态文件。是两大静态博客主流框架（jekyll和hexo）之一。
+jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，jekyll使用Liquid模板语言([官方文档](https://liquid.bootcss.com/)),是基于ruby的，
 所以如果在本地使用jekyll必须先搭建jekyll环境，我的建议是不必花时间在本地安装环境，由于gitHub page已经安装好环境，
 所以直接push到gitHub看实际效果更为明智.
 ### Github Pages是什么？
@@ -35,7 +36,7 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
 
 ## 刨析实例
 
-1. 目录结构
+1. ![目录结构](http://www.laughitover.com/assets/images/2018/0520-01.png)
 
 2. _config.yml:这个文件特别重要是保存配置的，标题，描述，评论等；基本上博客的所有配置可以放在这个文件里。
 
@@ -52,7 +53,7 @@ jekyll有很多模板，可以结合gitHub用来搭建免费的个人博客，je
 第三方的评论系统有很多，这里选择gitalk来进行演示，gitalk是纯客户端组件，无 Server 端，使用 Github 登录，
 所有评论数据存储为 Github Issue。
 
-* 首先需要注册GitHub Application，Authorization callback URL 填写当前使用插件页面的域名。具体见下图。
+* 首先需要注册GitHub Application，Authorization callback URL 填写当前使用插件页面的域名。
 
 * 创建comments.html，内容如下，添加到about页面（这里以about页面为例，其它页面类似）
 {% highlight css %}
