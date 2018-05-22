@@ -95,7 +95,13 @@ labels:
 
   -
     href: /pages/open-source.html
-    name: Code
+    name: code
+  -
+    href: /pages/open-source.html
+    name: interview
+  -
+    href: /pages/open-source.html
+    name: practice
 
   -
     href: /others.html
