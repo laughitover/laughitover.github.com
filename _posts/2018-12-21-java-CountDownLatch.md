@@ -4,30 +4,14 @@ title: Java并发编程之详解工具类CountDownLatch
 category: interview
 ---
 
-CountDownLatch是一个在java1.5被引入同步工具类，它允许一个或多个线程一直等待，直到其他线程的操作执行完后再执行。countdownlatch在Java开发中应用场景及其广泛，同时也是面试中的高频考点。每一个Java程序员都应该熟练掌握，在本篇文章中，我将会从以下几方面对其进行详细讲解：
-一、根据源码刨析CountDownLatch工作原理
-1、实现原理
-2、源码解析
-	2.1、CountDownLatch内部类Sync
-	2.2、CountDownLatch(n)构造器
-	2.3、countDownLatch.await()方法
-	2.4、 countDownLatch.countDown()方法
-二、CountDownLatch的应用实例
-1.	实现最大的并行性（马拉松比赛同时出发）
-2.	开始执行前等待其它线程完成各自任务（开董事会等待所有董事到达）
-3.	死锁检测（检测死循环）
-
-三、CountDownLatch常见的面试题
-1、介绍一下CountDownLatch工作原理?
-2、CountDownLatch 和CyclicBarrier的区别?
-3、CountDownLatch的使用场景?
-4、CountDownLatch 类中主要的方法?
+CountDownLatch是一个在java1.5被引入同步工具类，它允许一个或多个线程一直等待，直到其他线程的操作执行完后再执行。countdownlatch在Java开发中应用场景及其广泛，同时也是面试中的高频考点。
+每一个Java程序员都应该熟练掌握，在本篇文章中，我将会从以下几方面对其进行详细讲解：
 
 ## 一、根据源码刨析CountDownLatch工作原理
 ### 1、实现原理：
  CountDownLatch是通过用其内部类Sync（继承AbstractQueuedSynchronizer）构建一个计数器的方式来实现的，计数器的初始值为线程的数量。每当一个线程完成了自己的任务后，调用countDown()方法计数器的值就会减1。当计数器值减到0时，在闭锁上等待的线程就可以继续执行任务。
  
-###2、源码解析
+### 2、源码解析
 CountDownLatch类结构
  ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181220173449661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
 Sync ：CountDownLatch的内部类，Sync继承AbstractQueuedSynchronizer，采用AQS构建同步器。
@@ -40,7 +24,7 @@ tryAcquireShared方法其实就是判断一下当前计数器的值，是否为0
 tryReleaseShared方法就是利用CAS的方式，对计数器进行减一的操作，而我们实际上每次调用countDownLatch.countDown()方法的时候，最终都会调到这个方法，对计数器进行减一操作，一直减到0为止。
 
 
-####2.1、CountDownLatch内部类Sync
+#### 2.1、CountDownLatch内部类Sync
 ```
   /**
     * 使用 AQS 的状态代表计数值
@@ -76,7 +60,7 @@ tryReleaseShared方法就是利用CAS的方式，对计数器进行减一的操�
     }
 ```
 
-2.2、CountDownLatch(n)构造器
+#### 2.2、CountDownLatch(n)构造器
 
 CountDownLatch构造函数调用内部Sync类构造函数，而Sync继承AQS（AbstractQueuedSynchronizer）同步器，利用AQS的state机制使计算值处于同步共享状态。
 
@@ -87,7 +71,7 @@ public CountDownLatch(int count) {
 }
 ```
 
-2.3、countDownLatch.await()方法
+#### 2.3、countDownLatch.await()方法
 
 ```
 public void await() throws InterruptedException {
@@ -139,7 +123,7 @@ public final void acquireSharedInterruptibly(int arg)
 这个时候，当前线程就会进入了一个死循环当中，在这个死循环里面，会不断的进行判断，通过调用tryAcquireShared方法，判断计数器的值是否为0（为0的时候，其实就是我们调用了足够多次数的countDownLatch.countDown（）方法的时候），如果是为0的话，tryAcquireShared就会返回1，代码会继续执行，然后跳出了循环，也就不再“阻塞”当前线程了。
 >说是在不停的循环，其实也并非在不停的执行for循环里面的内容，因为在后面调用parkAndCheckInterrupt（）方法时，是会调用方法LockSupport.park(this)来禁用当前线程。
  
- 2.4、countDownLatch.countDown()方法
+ #### 2.4、countDownLatch.countDown()方法
 
 ```
 	public void countDown() {
@@ -160,9 +144,9 @@ public final void acquireSharedInterruptibly(int arg)
 线程调用此方法进行减1操作（实际是调用CountDownLatch内部类Sync的tryReleaseShared(arg)方法）。当count比0大，调用此方法进行减1，当count减为0时，调用doReleaseShared()方法释放所有等待当线程。
 >注：CountDownLatch底层采用AQS构建同步器，是共享锁机制，所以减1操作通过 CAS 和 volatile 保证了原子性和可见性。
 
-二、CountDownLatch的应用实例
+## 二、CountDownLatch的应用实例
 CountDownLatch的应用场景有很多，比如多线程下载，应用程序启动类在外部应用启动之后启动等。一般可以分为以下三中场景。
-1.	实现最大的并行性，有时我们想同时启动多个线程，实现最大程度的并行性。这个“同时”的保证就可以通过CountDownLatch来实现。比如我们要模拟马拉松比赛，发号枪响了之后所有运动员同时出发：
+### 1.	实现最大的并行性，有时我们想同时启动多个线程，实现最大程度的并行性。这个“同时”的保证就可以通过CountDownLatch来实现。比如我们要模拟马拉松比赛，发号枪响了之后所有运动员同时出发：
 
 ```
     public static void marathon() {
@@ -192,7 +176,7 @@ CountDownLatch的应用场景有很多，比如多线程下载，应用程序启
 ```
 执行结果：
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181221104216295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
-2.	开始执行前等待其它线程完成各自任务，这种场景应用最为广泛，例如应用程序启动类要确保在处理用户请求前，所有外部系统都已经启动和运行了。在比如开启多个线程分块下载一个大文件，每个线程只下载固定的一截，最后由另外一个线程来拼接所有的分段，那么这时候我们可以考虑使用CountDownLatch来控制并发，使得拼接的线程放在最后执行。这里我们通过一个简单场景来模拟一下，公司5个董事开会，需要所有董事全部到达会议才开始：
+### 2.	开始执行前等待其它线程完成各自任务，这种场景应用最为广泛，例如应用程序启动类要确保在处理用户请求前，所有外部系统都已经启动和运行了。在比如开启多个线程分块下载一个大文件，每个线程只下载固定的一截，最后由另外一个线程来拼接所有的分段，那么这时候我们可以考虑使用CountDownLatch来控制并发，使得拼接的线程放在最后执行。这里我们通过一个简单场景来模拟一下，公司5个董事开会，需要所有董事全部到达会议才开始：
 
 ```
     public static void directorMeeting() {
@@ -226,7 +210,7 @@ CountDownLatch的应用场景有很多，比如多线程下载，应用程序启
 运行结果：
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181221104746490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
 >思考：上个例子中的马拉松比赛中，计算成绩要在所有人完成比赛之后在进行，也可以通过CountDownLatch来实现，大家可以自己模拟一下。
-3.	死锁检测：这种场景应用较少，下例用CountDownLatch的检测死循环。
+### 3.	死锁检测：这种场景应用较少，下例用CountDownLatch的检测死循环。
 ```
 public class CountDownLatchForInfinitLoop {
 
@@ -273,17 +257,17 @@ public class CountDownLatchForInfinitLoop {
 运行结果：
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181221105945812.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
 到箭头所指时会卡住，CountDownLatch在本例子的作用是，每次Loop都等线程执行完了，再执行下一次loop，如果某一次出现死循环，则countDown()不会被执行，loop就会被”阻塞“在某次循环。
-三、CountDownLatch常见的面试题
-1、介绍一下CountDownLatch工作原理?
+## 三、CountDownLatch常见的面试题
+### 1、介绍一下CountDownLatch工作原理?
 答案见此文 1.1实现原理
-2、CountDownLatch 和CyclicBarrier的区别?
+### 2、CountDownLatch 和CyclicBarrier的区别?
 答：
 （1）CountDownLatch的计数器只能使用一次。而CyclicBarrier的计数器可以使用reset() 方法重置。所以CyclicBarrier能处理更为复杂的业务场景，比如如果计算发生错误，可以重置计数器，并让线程们重新执行一次。
 （2）CyclicBarrier还提供其他有用的方法，比如getNumberWaiting方法可以获得CyclicBarrier阻塞的线程数量。isBroken方法用来知道阻塞的线程是否被中断。
 （3）CountDownLatch会阻塞主线程，CyclicBarrier不会阻塞主线程，只会阻塞子线程。
-3、CountDownLatch的使用场景?
+### 3、CountDownLatch的使用场景?
 答案见此文 二、CountDownLatch的应用实例
-4、CountDownLatch 类中主要的方法?
+### 4、CountDownLatch 类中主要的方法?
 答案见此文 1.2源码解析
 
 
