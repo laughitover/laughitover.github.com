@@ -8,7 +8,7 @@ CountDownLatch是一个在java1.5被引入同步工具类，它允许一个或�
 每一个Java程序员都应该熟练掌握.
 
 ## 一、根据源码刨析CountDownLatch工作原理
-### 1、实现原理：
+### 1、实现原理
  CountDownLatch是通过用其内部类Sync（继承AbstractQueuedSynchronizer）构建一个计数器的方式来实现的，计数器的初始值为线程的数量。每当一个线程完成了自己的任务后，调用countDown()方法计数器的值就会减1。当计数器值减到0时，在闭锁上等待的线程就可以继续执行任务。
  
 ### 2、源码解析
@@ -24,7 +24,7 @@ tryAcquireShared方法其实就是判断一下当前计数器的值，是否为0
 tryReleaseShared方法就是利用CAS的方式，对计数器进行减一的操作，而我们实际上每次调用countDownLatch.countDown()方法的时候，最终都会调到这个方法，对计数器进行减一操作，一直减到0为止。
 
 
-#### 2.1、CountDownLatch内部类Sync
+### 2.1、CountDownLatch内部类Sync
 ```
   /**
     * 使用 AQS 的状态代表计数值
@@ -60,7 +60,7 @@ tryReleaseShared方法就是利用CAS的方式，对计数器进行减一的操�
     }
 ```
 
-#### 2.2、CountDownLatch(n)构造器
+### 2.2、CountDownLatch(n)构造器
 
 CountDownLatch构造函数调用内部Sync类构造函数，而Sync继承AQS（AbstractQueuedSynchronizer）同步器，利用AQS的state机制使计算值处于同步共享状态。
 
@@ -71,7 +71,7 @@ public CountDownLatch(int count) {
 }
 ```
 
-#### 2.3、countDownLatch.await()方法
+### 2.3、countDownLatch.await()方法
 
 ```
 public void await() throws InterruptedException {
@@ -123,7 +123,7 @@ public final void acquireSharedInterruptibly(int arg)
 这个时候，当前线程就会进入了一个死循环当中，在这个死循环里面，会不断的进行判断，通过调用tryAcquireShared方法，判断计数器的值是否为0（为0的时候，其实就是我们调用了足够多次数的countDownLatch.countDown（）方法的时候），如果是为0的话，tryAcquireShared就会返回1，代码会继续执行，然后跳出了循环，也就不再“阻塞”当前线程了。
 >说是在不停的循环，其实也并非在不停的执行for循环里面的内容，因为在后面调用parkAndCheckInterrupt（）方法时，是会调用方法LockSupport.park(this)来禁用当前线程。
  
- #### 2.4、countDownLatch.countDown()方法
+### 2.4、countDownLatch.countDown()方法
 
 ```
 	public void countDown() {
@@ -212,7 +212,8 @@ CountDownLatch的应用场景有很多，比如多线程下载，应用程序启
 运行结果：
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181221104746490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
 >思考：上个例子中的马拉松比赛中，计算成绩要在所有人完成比赛之后在进行，也可以通过CountDownLatch来实现，大家可以自己模拟一下。
-### 3.	死锁检测
+
+### 3. 死锁检测
 这种场景应用较少，下例用CountDownLatch的检测死循环。
 ```
 public class CountDownLatchForInfinitLoop {
