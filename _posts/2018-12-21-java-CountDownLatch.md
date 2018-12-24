@@ -5,7 +5,7 @@ category: interview
 ---
 
 CountDownLatch是一个在java1.5被引入同步工具类，它允许一个或多个线程一直等待，直到其他线程的操作执行完后再执行。countdownlatch在Java开发中应用场景及其广泛，同时也是面试中的高频考点。
-每一个Java程序员都应该熟练掌握，在本篇文章中，我将会从以下几方面对其进行详细讲解：
+每一个Java程序员都应该熟练掌握.
 
 ## 一、根据源码刨析CountDownLatch工作原理
 ### 1、实现原理：
@@ -146,7 +146,8 @@ public final void acquireSharedInterruptibly(int arg)
 
 ## 二、CountDownLatch的应用实例
 CountDownLatch的应用场景有很多，比如多线程下载，应用程序启动类在外部应用启动之后启动等。一般可以分为以下三中场景。
-### 1.	实现最大的并行性，有时我们想同时启动多个线程，实现最大程度的并行性。这个“同时”的保证就可以通过CountDownLatch来实现。比如我们要模拟马拉松比赛，发号枪响了之后所有运动员同时出发：
+### 1.	实现最大的并行性
+有时我们想同时启动多个线程，实现最大程度的并行性。这个“同时”的保证就可以通过CountDownLatch来实现。比如我们要模拟马拉松比赛，发号枪响了之后所有运动员同时出发：
 
 ```
     public static void marathon() {
@@ -176,7 +177,8 @@ CountDownLatch的应用场景有很多，比如多线程下载，应用程序启
 ```
 执行结果：
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181221104216295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
-### 2.	开始执行前等待其它线程完成各自任务，这种场景应用最为广泛，例如应用程序启动类要确保在处理用户请求前，所有外部系统都已经启动和运行了。在比如开启多个线程分块下载一个大文件，每个线程只下载固定的一截，最后由另外一个线程来拼接所有的分段，那么这时候我们可以考虑使用CountDownLatch来控制并发，使得拼接的线程放在最后执行。这里我们通过一个简单场景来模拟一下，公司5个董事开会，需要所有董事全部到达会议才开始：
+### 2.	开始执行前等待其它线程完成各自任务
+这种场景应用最为广泛，例如应用程序启动类要确保在处理用户请求前，所有外部系统都已经启动和运行了。在比如开启多个线程分块下载一个大文件，每个线程只下载固定的一截，最后由另外一个线程来拼接所有的分段，那么这时候我们可以考虑使用CountDownLatch来控制并发，使得拼接的线程放在最后执行。这里我们通过一个简单场景来模拟一下，公司5个董事开会，需要所有董事全部到达会议才开始：
 
 ```
     public static void directorMeeting() {
@@ -210,7 +212,8 @@ CountDownLatch的应用场景有很多，比如多线程下载，应用程序启
 运行结果：
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181221104746490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
 >思考：上个例子中的马拉松比赛中，计算成绩要在所有人完成比赛之后在进行，也可以通过CountDownLatch来实现，大家可以自己模拟一下。
-### 3.	死锁检测：这种场景应用较少，下例用CountDownLatch的检测死循环。
+### 3.	死锁检测
+这种场景应用较少，下例用CountDownLatch的检测死循环。
 ```
 public class CountDownLatchForInfinitLoop {
 
