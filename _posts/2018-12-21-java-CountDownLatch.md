@@ -5,7 +5,7 @@ category: interview
 ---
 
 CountDownLatch是一个在java1.5被引入同步工具类，它允许一个或多个线程一直等待，直到其他线程的操作执行完后再执行。countdownlatch在Java开发中应用场景及其广泛，同时也是面试中的高频考点。
-每一个Java程序员都应该熟练掌握.
+每一个Java程序员都应该熟练掌握。
 
 ## 一、根据源码刨析CountDownLatch工作原理
 ### 1、实现原理
@@ -13,12 +13,17 @@ CountDownLatch是一个在java1.5被引入同步工具类，它允许一个或�
  
 ### 2、源码解析
 CountDownLatch类结构
- ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181220173449661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
-Sync ：CountDownLatch的内部类，Sync继承AbstractQueuedSynchronizer，采用AQS构建同步器。
-CountDownLatch(int)：构造器，初始化计数。
-await()：当前线程一直等待，直到计数器为0才往下执行。
-await(long,TimeUnit):设置当前线程等待的时间，时间到了，不管其它线程是否执行完成。
-getCount()：获取当前计数器的值
+ ![在这里插入图片描述](http://www.laughitover.com/assets/images/2018/CountDownLatch/1.png)
+Sync ：CountDownLatch的内部类，Sync继承AbstractQueuedSynchronizer，采用AQS构建同步器。  
+
+CountDownLatch(int)：构造器，初始化计数。  
+
+await()：当前线程一直等待，直到计数器为0才往下执行。  
+
+await(long,TimeUnit):设置当前线程等待的时间，时间到了，不管其它线程是否执行完成。  
+
+getCount()：获取当前计数器的值  
+
 假设我们创建的：new CountDownLatch(5)。其实也就相当于new Sync(5)，相当于setState(5)。setState我们可以暂时理解为设置一个计数器，当前计数器初始值为5。
 tryAcquireShared方法其实就是判断一下当前计数器的值，是否为0了，如果为0的话返回1（返回1的时候，就表明当前线程可以继续往下走了，不再停留在调用countDownLatch.await(）这个方法的地方）。
 tryReleaseShared方法就是利用CAS的方式，对计数器进行减一的操作，而我们实际上每次调用countDownLatch.countDown()方法的时候，最终都会调到这个方法，对计数器进行减一操作，一直减到0为止。
@@ -176,7 +181,7 @@ CountDownLatch的应用场景有很多，比如多线程下载，应用程序启
     }
 ```
 执行结果：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181221104216295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2018/CountDownLatch/2.png)
 ### 2.	开始执行前等待其它线程完成各自任务
 这种场景应用最为广泛，例如应用程序启动类要确保在处理用户请求前，所有外部系统都已经启动和运行了。在比如开启多个线程分块下载一个大文件，每个线程只下载固定的一截，最后由另外一个线程来拼接所有的分段，那么这时候我们可以考虑使用CountDownLatch来控制并发，使得拼接的线程放在最后执行。这里我们通过一个简单场景来模拟一下，公司5个董事开会，需要所有董事全部到达会议才开始：
 
@@ -210,7 +215,7 @@ CountDownLatch的应用场景有很多，比如多线程下载，应用程序启
 ```
 与CountDownLatch的第一次交互是主线程等待其他线程。主线程必须在启动其他线程后立即调用CountDownLatch.await()方法。这样主线程的操作就会在这个方法上阻塞，直到其他线程完成各自的任务。
 运行结果：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181221104746490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2018/CountDownLatch/3.png)
 >思考：上个例子中的马拉松比赛中，计算成绩要在所有人完成比赛之后在进行，也可以通过CountDownLatch来实现，大家可以自己模拟一下。
 
 ### 3. 死锁检测
@@ -259,7 +264,7 @@ public class CountDownLatchForInfinitLoop {
 }
 ```
 运行结果：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181221105945812.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2018/CountDownLatch/4.png)
 到箭头所指时会卡住，CountDownLatch在本例子的作用是，每次Loop都等线程执行完了，再执行下一次loop，如果某一次出现死循环，则countDown()不会被执行，loop就会被”阻塞“在某次循环。
 ## 三、CountDownLatch常见的面试题
 ### 1、介绍一下CountDownLatch工作原理?
