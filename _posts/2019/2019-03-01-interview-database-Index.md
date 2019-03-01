@@ -1,0 +1,117 @@
+---
+layout: post
+title: Java并发编程之详解工具类CountDownLatch
+category: interview
+---
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据库索引是每个程序员必知必会的内容，也是面试官最喜欢问的知识点之一，MySQL数据库是我们日常工作中最常用的数据库。MySQL支持诸多存储引擎，而各种存储引擎中索引的实现也各不相同，因此MySQL数据库支持多种索引类型，如BTree索引，哈希索引，全文索引等等。本文将只关注最长用的BTree索引。
+## 一、索引相关的计算机原理
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文件系统及数据库系统普遍采用B-/+Tree作为索引结构，只有对计算机组成原理相关知识有所了解，才能真正的理解各种数据结构作为数据库索引的优劣。
+
+### 1、索引在计算机中的存储
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计算机一般包含两种类型的存储，计算机主存（RAM）和外部存储器（如硬盘、CD、SSD等）。我们知道主存的读取速度快，外部磁盘的数据读取速率要比主存慢好几个数量级。但是计算机主存一般比较小，实际数据库中索引本身很大，不可能全部存储在内存中，因此索引往往以索引文件的形式存储的磁盘上。这样的话，索引查找过程中就要产生磁盘I/O消耗，相对于内存存取，硬盘存取的消耗要高几个数量级，所以评价一个数据结构作为索引的优劣最重要的指标就是在查找过程中磁盘I/O的操作次数。好的索引设计要尽量减少查找过程中磁盘I/O的存取次数。
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190228182804182.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+### 2 、主存存取原理
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目前计算机使用的主存基本都是随机读写存储器（RAM），下图是简化后RAM的工作原理。 
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190227172441364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从抽象角度看，主存是一系列存储单元组成的矩阵，每个存储单元存储固定大小的数据。这里将其简化成一个二维地址：通过一个行地址和一个列地址可以唯一定位到一个存储单元。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当系统需要读取主存时，则将地址信号放到地址总线上传给主存，主存读到地址信号后，解析信号并定位到指定存储单元，然后将此存储单元数据放到数据总线上，供其它部件读取。写主存的过程类似，系统将要写入单元地址和数据分别放在地址总线和数据总线上，主存读取两个总线的内容，做相应的写操作。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里可以看出，主存存取的时间仅与存取次数呈线性关系，因为不存在机械操作，两次存取的数据的“距离”不会对时间有任何影响，例如，先取A0再取A1和先取A0再取D3的时间消耗是一样的。
+
+### 3、 磁盘存取原理
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如图，磁盘由盘片构成,每个盘片有两面，又称为盘面(Surface)，这些盘面覆盖有磁性材料。盘片中央有一个可以旋转的主轴(spindle)，他使得盘片以固定的旋转速率旋转，通常是5400转每分钟(Revolution Per Minute,RPM)或者是7200RPM。磁盘包含一个多多个这样的盘片并封装在一个密封的容器内。上图左，展示了一个典型的磁盘表面结构。每个表面是由一组成为磁道(track)的同心圆组成的，每个磁道被划分为了一组扇区(sector).每个扇区包含相等数量的数据位，通常是（512）子节。扇区之间由一些间隔(gap)隔开,不存储数据。
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190228182254967.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;索引一般以文件形式存储在磁盘上，索引检索需要磁盘I/O操作。与主存不同，磁盘读取数据靠的是机械运动，当需要从磁盘读取数据时，系统会将数据逻辑地址传给磁盘，磁盘的控制电路按照寻址逻辑将逻辑地址翻译成物理地址，即确定要读的数据在哪个磁道，哪个扇区。为了读取这个扇区的数据，需要将磁头放到这个扇区上方，为了实现这一点，磁头需要移动对准相应磁道，这个过程叫做寻道，所耗费时间叫做寻道时间，然后磁盘旋转将目标扇区旋转到磁头下，这个过程耗费的时间叫做旋转时间，最后便是对读取数据的传输。 所以每次读取数据花费的时间可以分为寻道时间、旋转延迟、传输时间三个部分。
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190228182733964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+**寻道时间**:：是磁臂移动到指定磁道所需要的时间，主流磁盘一般在5ms以下。
+**旋转延迟**：就是我们经常听说的磁盘转速，比如一个磁盘7200转，表示每分钟能转7200次，也就是说1秒钟能转120次，旋转延迟就是1/120/2 = 4.17ms。
+**传输时间**：指的是从磁盘读出或将数据写入磁盘的时间，一般在零点几毫秒，相对于前两个时间可以忽略不计。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;访问一次磁盘的时间，即一次磁盘IO的时间约等于5+4.17 = 9ms左右，听起来还挺不错的，但要知道一台500 -MIPS的机器每秒可以执行5亿条指令，因为指令依靠的是电的性质，换句话说执行一次IO的时间可以执行40万条指令，数据库动辄十万百万乃至千万级数据，每次9毫秒的时间，显然是个灾难。
+
+### 4 、局部性原理与磁盘预读
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于存储介质的特性，磁盘本身存取就比主存慢很多，再加上机械运动耗费，磁盘的存取速度往往比主存慢几个数量级！因此为了提高效率，要尽量减少磁盘I/O。为了达到这个目的，磁盘往往不是严格按需读取，而是每次都会预读，即使只需要一个字节，磁盘也会从这个位置开始，顺序向后读取一定长度的数据放入内存。这样做的理论依据是计算机科学中著名的**局部性原理**：当一个数据被用到时，其附近的数据也通常会马上被使用。程序运行期间所需要的数据通常比较集中。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于磁盘顺序读取的效率很高（不需要寻道时间，只需很少的旋转时间），因此对于具有局部性的程序来说，预读可以提高I/O效率。预读的长度一般为页（page）的整倍数。页是计算机管理存储器的逻辑块，硬件及操作系统往往将主存和磁盘存储区分割为连续的大小相等的块，每个存储块称为一页（页得大小通常为4k），主存和磁盘以页为单位交换数据。当程序要读取的数据不在主存中时，会触发一个缺页异常，此时系统会向磁盘发出读盘信号，磁盘会找到数据的起始位置并向后连续读取一页或几页载入内存中，然后异常返回，程序继续运行。
+
+## 二、数据库索引所采用的数据结构B-/+Tree
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;索引大多都是采用B树作为数据结构，这肯定是为了提升查找效率。但是具体如何提升查找效率呢？对于查找数据，最简单的方式是顺序查找。但是对于几十万上百万，甚至上亿的查询就很慢了。所以要对查找的方式进行优化，熟悉的二分查找，二叉树可以把速度提升到O(log2N)，查询的瓶颈在于树的深度，最坏的情况要查找到二叉树的最深层，由于每查找深一层，就要访问更深一层的索引文件。在索引文件很大的时候，这将是很大的开销。所以，如果要提高查询速度，那么就要降低树的深度。要降低树的深度，很自然的方法就是采用多叉树，再结合平衡二叉树的思想，我们可以构建一个平衡多叉树结构，然后就可以在上面构建平衡多路查找算法，提高大数据量下的搜索效率。
+
+### 1、B Tree
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B树（Balance Tree）又叫做B- 树（其实B-是由B-tree翻译过来，所以B-树和B树是一个概念），它就是一种平衡多路查找树。概括来说是一个节点可以拥有多于2个子节点的二叉查找树。为了更好的描述B树，我们定义记录为一个二元组[key, data]，key为记录的键值，data表示其它数据（图中只有key，没有画出data数据 ）。
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190228180340891.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于B-Tree的特性，在B-Tree中按key检索数据的算法非常直观：首先从根节点进行二分查找，如果找到则返回对应节点的data，否则对相应区间的指针指向的节点递归进行查找，直到找到节点或找到null指针，前者查找成功，后者查找失败。由于插入删除新的数据记录会破坏B-Tree的性质，因此在插入删除时，需要对树进行一个分裂、合并、转移等操作以保持B-Tree性质。
+
+### 2、B+Tree
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B-Tree有许多变种，其中最常见的是B+Tree。与B-Tree相比，B+Tree最大的不同就是非叶结点仅具有索引作用，跟记录有关的信息均存放在叶结点中。一般在数据库系统或文件系统中使用的B+Tree结构都在经典B+Tree的基础上进行了优化，增加了顺序访问指针。 
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190228180654393.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+如图所示，在B+Tree的每个叶子节点增加一个指向相邻叶子节点的指针，就形成了带有顺序访问指针的B+Tree。做这个优化的目的是为了提高区间访问的性能。
+
+### 3、 B树和B+树作为索引的区别
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于B+树在内部节点上不包含数据信息，因此在内存页中能够存放更多的key。 数据存放的更加紧密，具有更好的空间局部性。因此访问叶子节点上关联的数据也具有更好的缓存命中率。B+树的叶子结点都是相链的，因此对整棵树的便利只需要一次线性遍历叶子结点即可。而且由于数据顺序排列并且相连，所以便于区间查找和搜索。而B树则需要进行每一层的递归遍历。相邻的元素可能在内存中不相邻，所以缓存命中性没有B+树好。但是B树优点在于，由于B树的每一个节点都包含key和value，如果经常访问的元素离根节点更近，那么访问也更迅速。下面是B 树和B+树的区别图：
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190228182050647.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+## 三、MySQL数据库的索引实现
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们知道，之所以要建立索引，其实就是为了构建一种数据结构，可以在上面应用一种高效的查询算法，最终提高数据的查询速度。从上文我们知道数据库索引是存储到磁盘的，而我们又一般以使用磁盘I/O的次数来评价索引结构的优劣。所以好的索引结构就是能使磁盘I/O次数尽可能少的数据结构。在MySQL中，索引属于存储引擎级别的概念，不同存储引擎对索引的实现方式是不同的，本文主要讨论MyISAM引擎和InnoDB引擎，两种存储引擎都是采用B+树结构实现的。
+
+> 索引本质上就是数据结构
+
+### 1、 MyISAM引擎索引的实现
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址。下图是MyISAM索引的原理图： 
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190227185152648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里设表一共有三列，假设我们以Col1为主键，则上图是一个MyISAM表的主索引（Primary key）示意。可以看出MyISAM的索引文件仅仅保存数据记录的地址。在MyISAM中，主索引和辅助索引（Secondary key）在结构上没有任何区别，只是主索引要求key是唯一的，而辅助索引的key可以重复。如果我们在Col2上建立一个辅助索引，则此索引的结构如下图所示： 
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190227185235738.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同样也是一颗B+Tree，data域保存数据记录的地址。因此，MyISAM中索引检索的算法为：先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。 
+
+### 2、 InnoDB引擎索引的实现
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;虽然InnoDB也使用B+Tree作为索引结构，但具体实现方式却与MyISAM截然不同。第一个重大区别是InnoDB的数据文件本身就是索引文件。从上文知道，MyISAM索引文件和数据文件是分离的，索引文件仅保存数据记录的地址。而在InnoDB中，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录。这个索引的key是数据表的主键，因此InnoDB表数据文件本身就是主索引。 
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190227185342899.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上图是InnoDB主索引（同时也是数据文件）的示意图，可以看到叶节点包含了完整的数据记录。这种索引叫做**聚集索引**。因为InnoDB的数据文件本身要按主键聚集，所以InnoDB要求表必须有主键（MyISAM可以没有），如果没有显式指定，则MySQL系统会自动选择一个可以唯一标识数据记录的列作为主键，如果不存在这种列，则MySQL自动为InnoDB表生成一个隐含字段作为主键，这个字段长度为6个字节，类型为长整形。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二个与MyISAM索引的不同是InnoDB的辅助索引data域存储相应记录主键的值而不是地址。换句话说，InnoDB的所有辅助索引都引用主键作为data域。例如，下图为定义在Col3上的一个辅助索引： 
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190227185417782.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NhaWRlMw==,size_16,color_FFFFFF,t_70)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里以英文字符的ASCII码作为比较准则。聚集索引这种实现方式使得按主键的搜索十分高效，但是辅助索引搜索需要检索两遍索引：首先检索辅助索引获得主键，然后用主键到主索引中检索获得记录。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;了解不同存储引擎的索引实现方式对于正确使用和优化索引都非常有帮助，例如知道了InnoDB的索引实现后，就很容易明白为什么不建议使用过长的字段作为主键，因为所有辅助索引都引用主索引，过长的主索引会令辅助索引变得过大。再例如，用非单调的字段作为主键在InnoDB中不是个好主意，因为InnoDB数据文件本身是一颗B+Tree，非单调的主键会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主键则是一个很好的选择。
+
+## 四、索引使用及优化
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;索引并不是在什么情况下都会提升查询速度的，所以建立合理的索引并且合理使用，才能体现索引的价值。不要过多创建索引, 索引过多，会影响插入、删除数据的速度，因为我们修改的表数据，索引也需要进行调整重建
+### 1、索引的合理创建
+ - 频繁进行数据操作的表，不要建立太多的索引；
+ 
+ - 删除无用的索引，避免对执行计划造成负面影响；
+ - 尽量的扩展索引，减少新建索引。如表中已经有a的索引，现在要加(a,b)的索引，那么只需要修改原来的索引即可
+ - 合理建立联合索引（复合索引），联合索引是为多个字段创建一个索引。尽量考虑用单字段索引代替联合索引。
+ - 对于较长的列且前缀区分度很高尽量用列的**合适**前缀代替整个列作为索引key。
+ - 尽量选择区分度高的列作为索引：区分度的公式是count(distinct col)/count(*)，表示字段不重复的比例，比例越大我们扫描的记录数越少，唯一键的区分度是1，主键外检一定要建索引，而一些状态、性别字段可能在大数据面前区分度就是0。
+
+### 2、索引的合理使用
+ - 避免对列的操作：任何对列的操作都可能导致全表扫描，包括数据库函数、计算表达式等等，查询时要尽可能将操作移至等式的右边，甚至去掉函数。保持列“干净”，比如from_unixtime(create_time) = ’2018-05-29’就不能使用到索引，原因很简单，b+树中存的都是数据表中的字段值，但进行检索时，需要把所有元素都应用函数才能比较，可能导致全表扫描，显然成本太大。所以语句应该写成create_time = unix_timestamp(’2018-05-29’);
+ - 避免不必要的类型转换：如将字符型数据与数值型数据比较等。
+ - 增加查询的范围限制：避免全范围的搜索。
+ - 尽量去掉"IN"、"OR"：含有"IN"、"OR"的Where子句常会使索引失效；如果不产生大量重复值，可以考虑把子句拆开；拆开的子句中应该包含索引。
+ - 尽量去掉Where子句中的IS NULL、IS NOT NULL和 "<>"：避免全表扫描，使索引失效。
+ - like子句尽量前端匹配，例如：select * from city where name like ‘%S%’，索引失效，如果能够修改为：select * from city where name like ‘S%’，成功的利用了name字段的索引。
+
+**最左前缀原理**:其实联合索引的查找就跟查字典是一样的，先根据第一个字母查，然后再根据第二个字母查，或者只根据第一个字母查，但是不能跳过第一个字母从第二个字母开始查。这就是所谓的最左前缀原理。比如，我们在（a,b,c）字段上建一个联合索引，这个索引是先按a 再按b 再按c进行排列的，所以：
+以下的查询方式都可以用到索引
+select * from table where a=1；
+select * from table where a=1 and b=2；
+select * from table where a=1 and b=2 and c=3；
+如果查询语句是：
+select * from table where a=1 and c=3； 那么只会用到索引a。
+如果查询语句是：
+select * from table where b=2 and c=3； 因为没有用到最左前缀a，所以这个查询是没用到索引的。
+
+**注：** 如果只是颠倒了顺序，也是可以用到索引的，因为mysql查询优化器会判断纠正这条sql语句该以什么样的顺序执行效率最高，最后才生成真正的执行计划。但我们还是最好按照索引顺序来查询，这样查询优化器就不用重新编译了。
+
+## 五、索引相关面试题
+1、什么是聚族索引，什么是非聚族索引？
+答：聚集索引也称为聚簇索引（Clustered Index）是指数据库表中数据的物理顺序与键值的逻辑（索引）顺序相同。一个表只能有一个聚集索引，反之如果表中的行物理顺序与索引顺序不匹配，就是非聚族索引。根据本文第三节MySQL数据库的索引实现，我们知道， InnoDB引擎的索引就是聚族索引，其中B+树的叶节点包含了完整的数据记录，而MyISAM引擎的索引就是非聚族索引，其B+树的叶子节点存放的是数据地址，然后根据地址地址，读取相应数据记录。
+2、数据库索引采用的数据结构？
+答案见上文第二节：数据库索引所采用的数据结构B-/+Tree
+
+
+参考：
+https://www.cnblogs.com/downey/p/5302088.html
+https://www.cnblogs.com/yangecnu/p/Introduce-B-Tree-and-B-Plus-Tree.html
+https://blog.csdn.net/lovelion/article/details/8462814?spm=5176.100239.blogcont65126.16.eRvaNt
+https://www.cnblogs.com/wuchanming/p/6886020.html
+https://blog.csdn.net/suifeng3051/article/details/49530299?spm=5176.100239.blogcont65126.13.eRvaNt&locationNum=1
