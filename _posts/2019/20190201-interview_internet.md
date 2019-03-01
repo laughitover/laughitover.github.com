@@ -1,3 +1,10 @@
+---
+layout: post
+title: 面试之网络相关
+category: interview
+---
+直接上图
+
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2019/databaseIndex/01.png)
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2019/databaseIndex/02.png)
