@@ -121,7 +121,7 @@ select * from table where b=2 and c=3； 因为没有用到最左前缀a，所�
 答案见上文第二节：数据库索引所采用的数据结构B-/+Tree
 
 
-参考：
+参考：  
 https://www.cnblogs.com/downey/p/5302088.html
 https://www.cnblogs.com/yangecnu/p/Introduce-B-Tree-and-B-Plus-Tree.html
 https://blog.csdn.net/lovelion/article/details/8462814?spm=5176.100239.blogcont65126.16.eRvaNt
