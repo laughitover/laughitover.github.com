@@ -3,12 +3,11 @@ layout: post
 title: 面试系列之单例模式
 category: interview
 ---
-
-## 一、单例模式
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单例模式是最常用的设计模式之一，常常在面试中被面试官要求手写。  
 
+## 一、单例模式  
 ### 1、什么是单例模式
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;保证一个类仅有一个实例，并提供一个访问它的全局访问点。  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比如我们在系统启动时，需要加载一些公共的配置信息，对整个应用程序的整个生命周期中都可见且唯一，这时需要设计成单例模式。如：spring容器，session工厂，缓存，数据库连接池等等。
 ### 2、如何保证实例的唯一
  	由类本身进行实例化
