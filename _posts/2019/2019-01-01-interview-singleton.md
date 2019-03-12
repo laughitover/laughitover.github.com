@@ -32,6 +32,7 @@ category: interview
     }
 ```
 优点：简单，在类装载的时候就完成实例化，避免了线程同步问题；线程安全。  
+
 缺点：没有起到lazy loading的效果；
 > 也可以将类实例化的过程放在了静态代码块中，效果相同  
 
@@ -51,6 +52,7 @@ category: interview
     }
 ```
 优点：懒加载，线程安全。  
+
 缺点：每次获取实例都要加锁，耗费资源，其实只要实例已经生成，以后获取就不需要再锁了。
 ### 3、双重检查锁
 ```
@@ -72,7 +74,8 @@ category: interview
 ```
 优点：懒加载；线程安全；进行双重检查，保证只在实例未初始化前进行同步，效率较高。
 ### 4、静态内部类
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 静态内部类方式在Singleton类被装载时并不会立即实例化，而是在需要实例化时，调用getInstance方法，才会装载SingletonHolder 类，从而完成Singleton的实例化，实现了懒加载。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 静态内部类方式在Singleton类被装载时并不会立即实例化，而是在需要实例化时，调用getInstance方法，才会装载SingletonHolder 类，从而完成Singleton的实例化，实现了懒加载。  
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 类的静态属性只会在第一次加载类的时候初始化，所以在这里，JVM帮助我们保证了线程的安全性，在类进行初始化时，别的线程是无法进入的。
 ```
     public class Singleton {
