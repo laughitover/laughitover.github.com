@@ -1,3 +1,9 @@
+---
+layout: post
+title: 面试系列之单例模式
+category: interview
+---
+
 ## 一、单例模式
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单例模式是最常用的设计模式之一，常常在面试中被面试官要求手写。
 ### 1、什么是单例模式
