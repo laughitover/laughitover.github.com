@@ -27,4 +27,4 @@ Postman的主界面：
 - 6、返回的结果
 - 7、可以把常用的请求分类存起来
 
->[更多操作见官网：](https://www.getpostman.com)
+><a href="https://www.getpostman.com" target="_blank">更多操作见官网</a>
