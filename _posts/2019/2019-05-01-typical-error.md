@@ -23,4 +23,4 @@ category: practice
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2019/typicalError/0502.png)
 
->![官方文档](https://blog.jetbrains.com/idea/2017/10/intellij-idea-2017-3-eap-configurable-command-line-shortener-and-more/)
+>[官方文档](https://blog.jetbrains.com/idea/2017/10/intellij-idea-2017-3-eap-configurable-command-line-shortener-and-more/)
