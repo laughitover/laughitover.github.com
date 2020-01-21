@@ -4,13 +4,13 @@ title: 使用profiler分析dump文件排查内存泄漏
 category: interview
 ---
 
-## 现象: 线上服务一直重启
+**现象:** 线上服务一直重启
 
-## 原因: heartbeat每隔5s进行服务探活，连续3次超过1s无响应认为服务不可用，重启服务，通过日志发现服务频繁GC产生大段STW（stop the world）导致服务停顿。
+**原因:** heartbeat每隔5s进行服务探活，连续3次超过1s无响应认为服务不可用，重启服务，通过日志发现服务频繁GC产生大段STW（stop the world）导致服务停顿。
 
-## 排查: 通过Jporfiler进行分析
+**排查:** 通过Jporfiler进行分析
 
-## 安装: [Intellij IDEA集成性能分析工具JProfiler](http://www.laughitover.com//practice/2019/12/04/Jprofile.html)，可以单独使用。
+**安装:** [Intellij IDEA集成性能分析工具JProfiler](http://www.laughitover.com//practice/2019/12/04/Jprofile.html)，可以单独使用。
 
 ## 一、打开Jprofiler
 
