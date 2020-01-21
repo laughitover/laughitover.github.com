@@ -14,40 +14,40 @@ category: interview
 
 ### 打开Jprofiler会弹出一个对话框，分析堆转储快照，直接点击"Open a Snapshot"
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/001.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/001.png)
 
 ### 加载dump文件（文件的后缀要由.dump改成.hprof）
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/002.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/002.png)
 
 ### 加载dump文件完成,界面如下:
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/003.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/003.png)
 
 ### 选中占内存最大对象,具体分析，可以点击"size"排序,找到占用最多的对象
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/004.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/004.png)
 
 ### 查看引用关系
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/005.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/005.png)
 
 ### 找熟悉的对象（可根据包名前缀查找）
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/006.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/006.png)
 
 ### 在"Biggest Objects"视图,查看占内存最大对象
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/007.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/007.png)
 
 ### 点击"show in graph" ,通过图表的方式查看
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/008.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/008.png)
 
 ### 一级一级展开，可以通过调用链查找到对应的线程栈
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/009.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/009.png)
 
 ### 最后发现是查数据库一次性返回过多数据，其列表对象就是InspectObject对象(大对象)，占用内存太大，GC无法及时处理,导致内存溢出.
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/analyzeDump/010.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/010.png)
