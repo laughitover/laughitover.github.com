@@ -10,44 +10,60 @@ category: interview
 
 ## 排查: 通过Jporfiler进行分析
 
-## 安装: [Intellij IDEA集成性能分析工具JProfiler](http://www.laughitover.com//practice/2019/12/04/Jprofile.html)，安装之后可以单独使用。
+## 安装: [Intellij IDEA集成性能分析工具JProfiler](http://www.laughitover.com//practice/2019/12/04/Jprofile.html)，可以单独使用。
 
-## 打开Jprofiler会弹出一个对话框，分析堆转储快照，直接点击"Open a Snapshot"
+## 一、打开Jprofiler
+
+双击Jprofiler.exe,启动之后会弹出一个对话框，因为要分析堆转储快照，直接点击"Open a Snapshot"
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/001.png)
 
-## 加载dump文件（文件的后缀要由.dump改成.hprof）
+## 二、加载dump文件
+
+生成dump文件方法参考：[jvm 基础之解析堆dump文件]( http://www.laughitover.com//interview/2020/01/13/jvm-dump.html ) 生成的dump文件的后缀是.dump，要改成.hprof，才能用jprofiler打开
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/002.png)
 
-## 加载dump文件完成,界面如下:
+## 三、加载dump文件
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/003.png)
-
-## 选中占内存最大对象,具体分析，可以点击"size"排序,找到占用最多的对象
+加载完成，对占内存最大对象进行分析，可以点击"size"排序
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/004.png)
 
-## 查看引用关系
+## 四、查看引用关系
+
+- Merged outcoming references：查看它所引用的对象
+
+- Merged incoming references：查看它被哪些对象引用
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/005.png)
 
-## 找熟悉的对象（可根据包名前缀查找）
+## 五、找到熟悉的对象
+
+可根据包名前缀查找，一般可根据com.公司的包名 进行查找
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/006.png)
 
-## 在"Biggest Objects"视图,查看占内存最大对象
+## 六、在"Biggest Objects"视图,
+
+右键查看占内存最大对象，
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/007.png)
 
-## 点击"show in graph" ,通过图表的方式查看
+点击"show in graph" ,通过图表的方式查看
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/008.png)
 
-## 一级一级展开，可以通过调用链查找到对应的线程栈
+## 七、在graph试图查看调用链
+
+一级一级展开，可以通过调用链查找到对应的线程栈
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/009.png)
 
-## 最后发现是查数据库一次性返回过多数据，其列表对象就是InspectObject对象(大对象)，占用内存太大，GC无法及时处理,导致内存溢出.
+## 八、得出结论
 
-![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/010.png)
+通过对应线程栈找到内存泄漏的代码，发现是查数据时一次性返回过多数据，其列表对象就是InspectObject对象(大对象)，占用内存太大，GC无法及时处理,导致内存溢出.
+
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/011.png)
+
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/012.png)
