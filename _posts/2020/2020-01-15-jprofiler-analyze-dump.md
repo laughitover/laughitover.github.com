@@ -20,7 +20,9 @@ category: interview
 
 ## 二、加载dump文件
 
-生成dump文件方法参考：[jvm 基础之解析堆dump文件]( http://www.laughitover.com//interview/2020/01/13/jvm-dump.html ) 生成的dump文件的后缀是.dump，要改成.hprof，才能用jprofiler打开
+生成dump文件方法参考：[jvm 基础之解析堆dump文件]( http://www.laughitover.com//interview/2020/01/13/jvm-dump.html) 生成的dump文件的后缀是.dump，要改成.hprof，才能用jprofiler打开
+
+> [本文中dump文件](https://pan.baidu.com/s/1T8519PZ3b7TAfGGHm0AgOQ) 提取码：ojd2
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/002.png)
 
@@ -67,3 +69,5 @@ category: interview
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/011.png)
 
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/jprofilerAnalyzeDump/012.png)
+
+![在这里插入图片描述](http://www.laughitover.com/assets/images/admireCode.jpg)
