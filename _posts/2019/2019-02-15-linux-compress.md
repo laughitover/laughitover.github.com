@@ -4,13 +4,13 @@ title: linux下文件的打包和压缩
 category: practice
 ---
 
-```shell
+```javascript
 重点内容：
-    tar命令
-    zip命令
-    gzip命令 
-    bzip2命令 
-    xz命令
+  tar命令
+  zip命令
+  gzip命令
+  bzip2命令
+  xz命令
 ```
 
 ## 一、文件压缩的原理
@@ -38,67 +38,67 @@ Linux支持的压缩指令可以通过不同的后缀名进行区分，常见的
 
 以把/etc中内容打包压缩到/tmp/etc.*,然后在解压回/etc为例
 
-1. tar命令
+### 1、tar命令
 
-   ```shell
-   打包：tar -cvf /tmp/etc.tar /etc
-   
-   解包：tar -xvf /tmp/etc.tar /etc 
-   ```
+```shell
+打包：tar -cvf /tmp/etc.tar /etc
 
-    常用参数 ：
+解包：tar -xvf /tmp/etc.tar /etc 
+```
 
-   - **-c** ：建立压缩档案(create 的意思)；
+ 常用参数 ：
 
-   - **-x** ：解压档案！
+- **-c** ：建立压缩档案(create 的意思)；
 
-   - **-v** ： 显示所有过程 ，执行过程会打印在屏幕上！ 
+- **-x** ：解压档案！
 
-   - **-f** ： 使用档案名字，这个参数是*最后*一个参数，后面只能接档案名。 
+- **-v** ： 显示所有过程 ，执行过程会打印在屏幕上！ 
 
-2. zip命令
+- **-f** ： 使用档案名字，这个参数是*最后*一个参数，后面只能接档案名。 
 
-   ```shell
-   压缩：zip -r /tmp/etc.zip /etc 
-   
-   解压：unzip /tmp/etc.zip /etc
-   ```
+### 2、zip命令
 
-   - **-r**： 将指定的目录下的所有子目录以及文件一起处理
+```shell
+压缩：zip -r /tmp/etc.zip /etc 
 
-3. gz命令 
+解压：unzip /tmp/etc.zip /etc
+```
 
-   ```shell
-   压缩：tar -czvf /tmp/etc.tar.gz /etc 
-   
-   解压：tar -xzvf /tmp/etc.tar.gz /etc  
-   ```
+- **-r**： 将指定的目录下的所有子目录以及文件一起处理
 
-   - **-z**：使用gzip命令对文件进行压缩或解压缩。
-   
-4. bz2命令 
+### 3、gz命令
 
-   ```shell
-   压缩：tar -cjvf /tmp/etc.tar.bz2 /etc 
-   
-   解压：tar -xjvf /tmp/etc.tar.bz2 /etc  
-   ```
-   
-   - **-j**：使用bz2命令对文件进行压缩或解压缩。
-   
-5. xz命令（必须分两步）
+```shell
+压缩：tar -czvf /tmp/etc.tar.gz /etc 
 
-   ```shell
-   打包：tar -cvf /tmp/etc.tar /etc   
-   压缩：xz -z /tmp/etc.tar #将 /tmp/etc.tar压缩成为 /tmp/etc.tar.xz
-   
-   解压缩：xz -d etc.tar.xz #将 etc.tar.xz解压成 etc.tar
-   解包：tar -xvf etc.tar
-   ```
-   
-   - **-z**：使用xz命令对文件进行压缩操作。
-   
-   - **-d**：使用xz命令对文件进行解压缩操作。
+解压：tar -xzvf /tmp/etc.tar.gz /etc  
+```
+
+- **-z**：使用gzip命令对文件进行压缩或解压缩。
+
+### 4、bz2命令
+
+```shell
+压缩：tar -cjvf /tmp/etc.tar.bz2 /etc 
+
+解压：tar -xjvf /tmp/etc.tar.bz2 /etc  
+```
+
+- **-j**：使用bz2命令对文件进行压缩或解压缩。
+
+### 5、xz命令（必须分两步）
+
+```shell
+打包：tar -cvf /tmp/etc.tar /etc   
+压缩：xz -z /tmp/etc.tar #将 /tmp/etc.tar压缩成为 /tmp/etc.tar.xz
+
+解压缩：xz -d etc.tar.xz #将 etc.tar.xz解压成 etc.tar
+解包：tar -xvf etc.tar
+```
+
+- **-z**：使用xz命令对文件进行压缩操作。
+
+- **-d**：使用xz命令对文件进行解压缩操作。
 
 > 以上命令均可以将**多个文件夹或文件**打包压缩到一个文件中
 
