@@ -4,15 +4,6 @@ title: linux下文件的打包和压缩
 category: practice
 ---
 
-```javascript
-重点内容：
-  tar命令
-  zip命令
-  gzip命令
-  bzip2命令
-  xz命令
-```
-
 ## 一、文件压缩的原理
 
 ​		简单来说，压缩技术就是在存储时将文件里面没有使用的空间利用起来，主要有以下两种情况。
