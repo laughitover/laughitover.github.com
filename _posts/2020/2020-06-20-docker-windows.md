@@ -8,9 +8,10 @@ category: interview
 
 ## 一、下载安装 Docker for Windows 
 
-下载地址：[Docker Desktop](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/ )
-
-成功安装Docker Desktop后，cmd中（已安装git可以在Git bash中）输入docker --version，打印出版本信息，表示Docker for Windows安装成功。
+下载地址：[Docker Desktop](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/)，
+成功安装Docker Desktop后，cmd中（已安装git可以在Git bash中）输入docker --version，
+打印出版本信息，表示Docker for Windows安装成功。
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/dcokerWindows/002.png)
 
 ## 二、docker简单使用实例
 
@@ -19,7 +20,7 @@ category: interview
 通过命令行终端（cmd）或者Git，从GitHub克隆示例项目：
 
 ```shell
-git clone https://github.com/dockersamples/node-bulletin-bo
+git clone https://github.com/dockersamples/node-bulletin-board
 cd node-bulletin-board/bulletin-board-app
 ```
 
@@ -37,7 +38,7 @@ docker build --tag bulletinboard:1.0 .
 >
 > 2、忽略最后打印出 SECURITY WARNING”（安全警告）的消息。
 
-### 3、将图像作为容器运行
+### 3、将镜像作为容器运行
 
 1. 运行以下命令基于新镜像启动容器：
 
@@ -89,11 +90,9 @@ docker build --tag bulletinboard:1.0 .
 
 - 输入存储库名称为`bulletinboard`，然后单击页面底部的**创建**。
 
-![进行回购](https://docs.docker.com/get-started/images/newrepo.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/dcokerWindows/005.png)
 
-- 现在可以在Docker Hub上共享镜像了，但是，您必须首先做一件事：必须*正确命名*镜像的*名称*才能在Docker Hub上共享。具体来说，您必须将图像命名为`/:`。
-
-确保您位于`node-bulletin-board/bulletin-board-app`终端或PowerShell 中的目录中，然后运行：
+- 现在可以在Docker Hub上共享镜像了，确保位于目录`node-bulletin-board/bulletin-board-app`中，然后运行：
 
 ```shell
 docker tag bulletinboard:1.0 <Your Docker ID>/bulletinboard:1.0
@@ -114,45 +113,14 @@ docker push <Your Docker ID>/bulletinboard:1.0
 此外，还可以在Docker Hub存储库描述中添加包含Dockerfile的源代码的链接或注释。
 
 
+### 配置镜像加速器
 
+ 在系统右下角托盘图标内右键菜单选择 `Settings`，打开配置窗口后左侧导航菜单选择 `Docker Daemon`。编辑窗口内的JSON串，填写下方加速器地址： 
 
+```json
+{
+  "registry-mirrors": ["https://*****.mirror.aliyuncs.com"]
+}
+```
 
-### 配置远程访问
-
-打开`docker`的设置界面，找到`General`,在里面找到`Expose daemon on tcp://localhost:2375 without TLS`选项，打上勾，即可进行本地或远程API调用。
-
-![img](https:////upload-images.jianshu.io/upload_images/9264166-0b03a9b7618a678a.png?imageMogr2/auto-orient/strip|imageView2/2/w/812/format/webp)
-
-idea安装docker插件
-
-### 配置连接
-
-重启完成后，我们打开`settings`可以看到`docker`
-
-![img](https:////upload-images.jianshu.io/upload_images/9264166-f23824f0276df35f.png?imageMogr2/auto-orient/strip|imageView2/2/w/1152/format/webp)
-
-4.png
-
-点击`+`，添加一个连接。
-
-![img](https:////upload-images.jianshu.io/upload_images/9264166-0b7c809d4afb11db.png?imageMogr2/auto-orient/strip|imageView2/2/w/1159/format/webp)
-
-5.png
-
-我们通过tcp的方式连接到`linux`或者`windows`的`docker`服务。信息配置好后，`idea`会自动检测。然后会输出`connection successful`。
-
-## idea上运行docker项目
-
-然后配置`docker`启动项
-选择编辑：
-
-![img](https://upload-images.jianshu.io/upload_images/9264166-6426456d6f0d941d.png?imageMogr2/auto-orient/strip|imageView2/2/w/395/format/webp)
-
-12.png
-
-添加一个启动项：
-
-![img](https://upload-images.jianshu.io/upload_images/9264166-b9e3ad840b0fbe64.png?imageMogr2/auto-orient/strip|imageView2/2/w/490/format/webp)
-
-![1592646208038](C:\Users\wangjs5\AppData\Roaming\Typora\typora-user-images\1592646208038.png)
-
+注意： `Docker for Windows` 有两种运行模式，一种运行`Windows`相关容器，一种运行传统的`Linux`容器。同一时间只能选择一种模式运行。 
