@@ -122,3 +122,4 @@ docker官方镜像仓库地址为：https://hub.docker.com/search?q=&type=image�
   "registry-mirrors": ["https://*****.mirror.aliyuncs.com"]
 }
 ```
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/dcokerWindows/006.png)
