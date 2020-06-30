@@ -46,11 +46,10 @@ docker build --tag bulletinboard:1.0 .
    ```
 
    - `--publish`Docker将主机端口8000映射到容器的端口8080。
-- `--detach` Docker在后台运行此容器。
+   - `--detach` Docker在后台运行此容器。
    - `--name`指定一个名称，在后续命令中，您可以使用该名称来引用您的容器`bb`。
    
 2. 在浏览器中输入`localhost:8000`。应该看到公告板应用程序已启动并正在运行。
-
 ![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/dcokerWindows/004.png)
 
 3. 删除命令：
