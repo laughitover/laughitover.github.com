@@ -6,15 +6,15 @@ category: interview
 
 
 
-### 一、下载安装 Docker for Windows 
+## 一、下载安装 Docker for Windows 
 
- Docker Desktop下载地址：http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/ 
+下载地址：[Docker Desktop](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/ )
 
 成功安装Docker Desktop后，cmd中（已安装git可以在Git bash中）输入docker --version，打印出版本信息，表示Docker for Windows安装成功。
 
-### 二、docker简单使用实例
+## 二、docker简单使用实例
 
-#### 1、下载示例项目
+### 1、下载示例项目
 
 通过命令行终端（cmd）或者Git，从GitHub克隆示例项目：
 
@@ -23,11 +23,11 @@ git clone https://github.com/dockersamples/node-bulletin-bo
 cd node-bulletin-board/bulletin-board-app
 ```
 
-#### 2、构建镜像
+### 2、构建镜像
 
 确保当前目录是`node-bulletin-board/bulletin-board-app`。运行以下命令来构建公告板image：
 
-```script
+```shell
 docker build --tag bulletinboard:1.0 .
 ```
 
@@ -37,11 +37,11 @@ docker build --tag bulletinboard:1.0 .
 >
 > 2、忽略最后打印出 SECURITY WARNING”（安全警告）的消息。
 
-#### 3、将图像作为容器运行
+### 3、将图像作为容器运行
 
 1. 运行以下命令基于新镜像启动容器：
 
-   ```script
+   ```shell
    docker run --publish 8000:8080 --detach --name bb bulletinboard:1.0
    ```
 
@@ -51,11 +51,11 @@ docker build --tag bulletinboard:1.0 .
    
 2. 在浏览器中输入`localhost:8000`。应该看到公告板应用程序已启动并正在运行。
 
-   ![](D:\workspace\laughitover.github.com\assets\images\2020\dcoker windows\004.png)
+   ![](http://www.laughitover.com/assets/images/2020/dcoker windows/004.png)
 
 3. 删除命令：
 
-   ```script
+   ```shell
    docker rm --force bb
    ```
 
@@ -63,11 +63,11 @@ docker build --tag bulletinboard:1.0 .
 
 
 
-### 三、在Docker Hub上共享镜像
+## 三、在Docker Hub上共享镜像
 
 类似于我们可以把代码放到代码托管服务平台Git Hub，我们也可以把自己的 Docker镜像放到基于云的镜像存储库 Docker Hub。这样就可以在任何计算机上运行它们。
 
-#### 1、设置Docker Hub帐户
+### 1、设置Docker Hub帐户
 
 - 访问[Docker Hub注册](https://hub.docker.com/signup)页面。
 
@@ -81,7 +81,7 @@ docker build --tag bulletinboard:1.0 .
 
 > 也可以通过输入`docker login`命令登录Docker Hub 。
 
-#### 2、创建一个Docker Hub存储库并push image
+### 2、创建一个Docker Hub存储库并push image
 
 确保已设置Docker Hub帐户并将其连接到Docker桌面，创建第一个存储库，并将公告板镜像推送到Docker Hub。
 
@@ -107,7 +107,7 @@ docker push <Your Docker ID>/bulletinboard:1.0
 
 在[Docker Hub中](https://hub.docker.com/repositories)访问存储库，将在此处看到新镜像。注意，默认情况下，Docker Hub存储库是公共的。
 
-### 结论
+## 结论
 
 至此，镜像已在Docker Hub上可用，可以在任何地方运行它。如果尝试在尚未安装该镜像的机器上使用它，则Docker将自动尝试从Docker Hub下载它。通过以这种方式移动镜像，不再需要在计算机上安装除Docker以外的任何依赖项。容器化应用程序的依赖关系已完全封装并隔离在镜像中，通过Docker Hub已经完全实现镜像共享。
 
