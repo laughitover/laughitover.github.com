@@ -5,7 +5,6 @@ category: interview
 ---
 
 
-
 ## 一、下载安装 Docker for Windows 
 
 下载地址：[Docker Desktop](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/)，
@@ -52,7 +51,7 @@ docker build --tag bulletinboard:1.0 .
    
 2. 在浏览器中输入`localhost:8000`。应该看到公告板应用程序已启动并正在运行。
 
-   ![](http://www.laughitover.com/assets/images/2020/dcoker windows/004.png)
+![在这里插入图片描述](http://www.laughitover.com/assets/images/2020/dcokerWindows/004.png)
 
 3. 删除命令：
 
@@ -108,19 +107,18 @@ docker push <Your Docker ID>/bulletinboard:1.0
 
 ## 结论
 
-至此，镜像已在Docker Hub上可用，可以在任何地方运行它。如果尝试在尚未安装该镜像的机器上使用它，则Docker将自动尝试从Docker Hub下载它。通过以这种方式移动镜像，不再需要在计算机上安装除Docker以外的任何依赖项。容器化应用程序的依赖关系已完全封装并隔离在镜像中，通过Docker Hub已经完全实现镜像共享。
+至此，镜像已经上传到Docker Hub，如果尝试在尚未安装该镜像的机器上使用它，则Docker将自动尝试从Docker Hub下载它。
+通过以这种方式，不再需要在计算机上安装除Docker以外的任何依赖项。容器化应用程序的依赖关系已完全封装并隔离在镜像中，
+并且通过Docker Hub已经完全实现镜像共享。
 
-此外，还可以在Docker Hub存储库描述中添加包含Dockerfile的源代码的链接或注释。
+## 配置镜像加速器
 
-
-### 配置镜像加速器
-
- 在系统右下角托盘图标内右键菜单选择 `Settings`，打开配置窗口后左侧导航菜单选择 `Docker Daemon`。编辑窗口内的JSON串，填写下方加速器地址： 
+docker官方镜像仓库地址为：https://hub.docker.com/search?q=&type=image，因为是国外地址，因此下载镜像时速度很慢。
+我们可以配置国内镜像加速，在系统右下角托盘图标内右键菜单选择 `Settings`，打开配置窗口后左侧导航菜单选择 `Docker Daemon`。
+编辑窗口内的JSON串，填写下方加速器地址： 
 
 ```json
 {
   "registry-mirrors": ["https://*****.mirror.aliyuncs.com"]
 }
 ```
-
-注意： `Docker for Windows` 有两种运行模式，一种运行`Windows`相关容器，一种运行传统的`Linux`容器。同一时间只能选择一种模式运行。 
