@@ -131,10 +131,12 @@ public class KillHandler implements SignalHandler {
 
 ## 三、 区别
 
-第一种方法在进程被kill的时候main函数就已经结束了，仅会运行shutdownHook中run()方法的代码。
+第一种方法在进程被kill的时候main函数就已经结束了，仅会运行shutdownHook中run()方法的代码。  
+
 第二种方法handle函数会在进程被kill时收到信号，对main函数的运行不会有影响，
 我们可以自己在main函数中添加状态，当收到信号时修改状态，根据状态灵活处理程序。
 
 ## 补充
-kill -15 pid 表示程序结束(terminate)信号，相当于idea 点击一下stop按钮
+kill -15 pid 表示程序结束(terminate)信号，相当于idea 点击一下stop按钮  
+
 kill -9 pid  表示强制停止进程，用来立即结束程序，相当于第二下点击stop按钮
