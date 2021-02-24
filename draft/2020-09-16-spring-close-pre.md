@@ -1,0 +1,30 @@
+
+
+
+
+
+在spring容器初始化bean和销毁前所做的操作定义方式有三种：
+
+第一种：通过@PostConstruct 和 @PreDestroy 方法 实现初始化和销毁bean之前进行的操作
+被@PreDestroy修饰的方法会在服务器卸载Servlet的时候运行，并且只会被服务器调用一次，类似于Servlet的destroy()方法。
+被@PreDestroy修饰的方法会在destroy()方法之后运行，在Servlet被彻底卸载之前。
+
+第二种：通过 在xml中定义init-method 和  destory-method方法
+
+第三种： 通过bean实现InitializingBean和 DisposableBean接口
+
+:实现ApplicationListener接口
+
+ApplicationListener接口的泛型类可以使用ApplicationStartedEvent和ApplicationReadyEvent
+应用监听器事件执行先后顺序如下：
+ApplicationStartingEvent
+ApplicationEnvironmentPreparedEvent
+ApplicationPreparedEvent
+ApplicationStartedEvent
+ApplicationReadyEvent
+ApplicationFailedEvent
+实现CommandLineRunner和ApplicationRunner完成启动加载数据
+
+SmartLifeCycle
+
+
