@@ -22,7 +22,7 @@ synochronized锁升级jdk1.6
 指向重量级锁的指针
 对象的hashcode 线程
 
-大部分场景存在两个以上的线程竞争，开启偏向锁反而会获取锁的资源消耗，所以可以通过jvm参数UseBiase
+大部分场景存在两个以上的线程竞争，开启偏向锁反而会获取锁的资源消耗，所以可以通过jvm参数UseBiaseLocking来设置开启或关闭
 
 底层基于volatile和cas实现
 monitorenter monitorexit 计数器
@@ -62,4 +62,31 @@ hashCode是int类型32位 高16位 低16位 右移16位
 2、所有叶子节点都是黑色
 3、每个红色节点必须有两个黑色子节点（红节点不连续）
 4、从任一节点到其每个叶子节点的所有路径都包含相同数目的黑色节点
+
+ConcurrentHashMap原理
+ jdk1.7分段锁技术 segment继承了ReetrantLock
+定位元素需要进行两次hash操作，tryLock 超过64次 挂起
+jdk 1.8 数组+链表+红黑树，先cas操作，和volitale配合，乐观锁，只有put的时候用Synchronized
+
+
+阻塞队列BlockingQueue四组方法（图）
+
+ThreadLocal为变量在每个线程中都创建了一个副本，每个线程都可以访问自己内部的副本变量，
+Thread是弱引用，为null时，会被回收，但是ThreadLocalMap生命周期和Thread的一样，它不会被回收，
+这时候就会出现内存泄漏，也就是ThreadLocalMap的key没了，但是value还在，需要在使用完成后，执行remove操作
+应用
+1、进行对象跨层传递的时候，使用ThreadLocal可以避免多次传递，打破层次间的约束
+2、线程间数据隔离
+3、进行事务操作，用域存储线程事务信息
+4、数据库连接，session会话管理
+
+java对象的生命周期
+1、creation：创建阶段
+2、using：应用阶段
+3、invisible：不可视阶段
+4、unreachable：不可达阶段
+5、collected：可收集阶段
+6、finalized：终结阶段
+7、free：释放阶段
+
 
